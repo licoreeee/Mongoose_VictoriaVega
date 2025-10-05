@@ -13,28 +13,25 @@ async function main() {
         })
         console.log('Producto creado', respCreate);
 
-        await ProductoDAO.crearProducto({
-            nombre: 'Galletas',
-            precio: 17.90,
-            cantidad: 100
-        })
-
-        await ProductoDAO.crearProducto({
-            nombre: 'Galletas',
-            precio: 17.90,
-            cantidad: 100
-        })
-
-        await ProductoDAO.crearProducto({
-            nombre: 'Galletas',
-            precio: 17.90,
-            cantidad: 100
+        let producto2 = await ProductoDAO.crearProducto({
+            nombre: 'Paletas',
+            precio: 5.00,
+            cantidad: 10
         })
 
         let producto = await ProductoDAO.obtenerProductoPorId(respCreate._id);
         console.log('Producto encontrado: ', producto);
 
         let productos = await ProductoDAO.obtenerProductos(10);
+        console.log('Productos encontrados: ', productos);
+
+        let productoActualizado = await ProductoDAO.actualizarProducto(respCreate._id, { precio: 18.00 });
+        console.log('Producto actualizado', productoActualizado);
+
+        let productoEliminado = await ProductoDAO.eliminarProducto(producto2._id);
+        console.log('Producto eliminado: ', productoEliminado);
+
+        let productosActuales = await ProductoDAO.obtenerProductos(10);
         console.log('Productos encontrados: ', productos);
 
         const venta = await VentaDAO.crearVenta({
@@ -47,12 +44,25 @@ async function main() {
         const VentaConProductos = await VentaDAO.agregarProductosAVenta(venta._id, [
             { idProducto: respCreate._id, nombre: respCreate.nombre, precio: respCreate.precio, cantidad: 2 }
         ])
+        console.log("Venta con productos: ", VentaConProductos);
 
-        console.log
+        let ventaEncontrada = await VentaDAO.obtenerVentaPorId(venta._id);
+        console.log('Venta encontrada: ', ventaEncontrada);
+
+        let ventas = await VentaDAO.obtenerVentas(10);
+        console.log('Ventas encontradas: ', ventas);
+
+        let ventaActualizada = await VentaDAO.actualizarVenta(venta._id, { total: 50.00 });
+        console.log('Venta actualizada: ', ventaActualizada);
+
+        let ventaEliminada = await VentaDAO.eliminarVenta(venta._id);
+        console.log('Venta eliminada: ', ventaEliminada);
 
         await desconectar().then(() => console.log('Desconexión con la BD exitosa.')).catch(error => {throw error});
     } catch (error) {
-        throw error;
         await desconectar();
+        throw error;
     }
 }
+
+main();
