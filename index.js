@@ -42,7 +42,7 @@ async function main() {
         console.log('Venta creada: ', venta);
 
         const VentaConProductos = await VentaDAO.agregarProductosAVenta(venta._id, [
-            { idProducto: respCreate._id, nombre: respCreate.nombre, precio: respCreate.precio, cantidad: 2 }
+            { idProducto: respCreate._id, descripcion: respCreate.nombre, precioVenta: respCreate.precio, cantidad: 2 }
         ])
         console.log("Venta con productos: ", VentaConProductos);
 
